@@ -281,4 +281,39 @@ class CollaboratorModel
 
         // $stmt = $this->cnx->executeQuery($qry, $parameters);
     }
+
+    public function checklogin()
+    {
+        $qry = "
+        SELECT
+            ClbCod,
+            ClbNme,
+            ClbSup,
+            ClbBlq,
+            ClbKey
+        FROM
+        " . $this->tbl . "
+        WHERE
+            ClbKey = :ClbKey
+        ";
+
+        $parameters = array(
+            ":ClbKey" => $this->attClbKey
+        );
+
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
+        $rows = $stmt->rowCount();
+
+        if ($rows) {
+            $this->data_row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $this->attClbCod = $this->data_row['ClbCod'];
+            $this->attClbNme = $this->data_row['ClbNme'];
+            $this->attClbSup = $this->data_row['ClbSup'];
+            $this->attClbBlq = $this->data_row['ClbBlq'];
+            $this->attClbKey = $this->data_row['ClbKey'];
+        }
+
+        return boolval($rows);
+    }
 }

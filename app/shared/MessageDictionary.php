@@ -20,30 +20,35 @@ class MessageDictionary
                 $this->message["type"] = self::TYPE_MESSAGE_SUCCESS;
                 $this->message["title"] = $title;
                 $this->message["message"] = $description;
+                $this->message["alert"] = "alert alert-success";
                 break;
             case 1:
                 $this->message["code"] = $code;
                 $this->message["type"] = self::TYPE_MESSAGE_ERROR;
                 $this->message["title"] = $title;
                 $this->message["message"] = $description;
+                $this->message["alert"] = "alert alert-danger";
                 break;
             case 2:
                 $this->message["code"] = $code;
                 $this->message["type"] = self::TYPE_MESSAGE_WARNING;
                 $this->message["title"] = $title;
                 $this->message["message"] = $description;
+                $this->message["alert"] = "alert alert-warning";
                 break;
             case 3:
                 $this->message["code"] = $code;
                 $this->message["type"] = self::TYPE_MESSAGE_INFORMATION;
                 $this->message["title"] = $title;
                 $this->message["message"] = $description;
+                $this->message["alert"] = "alert alert-info";
                 break;
             default:
                 $this->message["code"] = $code;
                 $this->message["type"] = self::TYPE_MESSAGE_INFORMATION;
                 $this->message["title"] = $title;
                 $this->message["message"] = $description;
+                $this->message["alert"] = "alert alert-dark";
         }
 
         return $this->message;

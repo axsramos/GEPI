@@ -4,6 +4,8 @@ use app\core\Controller;
 use app\shared\MessageDictionary;
 use app\model\StockModel;
 
+session_start();
+
 class Stock extends Controller
 {
   private $csStockModel;

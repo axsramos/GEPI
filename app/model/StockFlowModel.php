@@ -20,7 +20,7 @@ class StockFlowModel
 
     // -- database -- //
     private $cnx;
-    private $tbl = 'Stock';
+    private $tbl = 'StockFlow';
 
     private $csMessage;
     public $messages = array();
@@ -117,7 +117,8 @@ class StockFlowModel
             StkFlwCod,
             StkFlwDca,
             StkCod,
-            EqpCod,
+            Equipment.EqpCod as EqpCod,
+            Equipment.EqpDsc as EqpDsc,
             StkFlwBlq,
             StkFlwObs,
             StkFlwAddClb,
@@ -125,40 +126,72 @@ class StockFlowModel
             StkFlwRsvCod
         FROM
         " . $this->tbl . "
+        INNER JOIN Equipment
+        ON
+            Equipment.EqpCod = StockFlow.EqpCod
+        WHERE
+            StkCod = :StkCod OR :StkCod = ''
         ";
 
-        $stmt = $this->cnx->executeQuery($qry);
+        $parameters = array(
+            ":StkCod" => $this->attStkCod
+        );
+
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
         $rows = $stmt->rowCount();
         $allLines = false;
 
         if ($rows) {
             $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-
+        
         return $allLines;
     }
 
     public function readLine()
     {
-        $qry = "
-        SELECT
-            StkFlwCod,
-            StkFlwDca,
-            StkCod,
-            EqpCod,
-            StkFlwBlq,
-            StkFlwObs,
-            StkFlwAddClb,
-            StkFlwRmvClb,
-            StkFlwRsvCod
-        FROM
-        " . $this->tbl . "
-        WHERE
-            StkFlwCod = :StkFlwCod
-        ";
+        if (empty($this->attStkFlwCod)) {
+            $qry = "
+            SELECT
+                StkFlwCod,
+                StkFlwDca,
+                StkCod,
+                EqpCod,
+                StkFlwBlq,
+                StkFlwObs,
+                StkFlwAddClb,
+                StkFlwRmvClb,
+                StkFlwRsvCod
+            FROM
+            " . $this->tbl . "
+            WHERE
+                StkCod = :StkCod
+            AND EqpCod = :EqpCod
+            ";
+        } else {
+            $qry = "
+            SELECT
+                StkFlwCod,
+                StkFlwDca,
+                StkCod,
+                EqpCod,
+                StkFlwBlq,
+                StkFlwObs,
+                StkFlwAddClb,
+                StkFlwRmvClb,
+                StkFlwRsvCod
+            FROM
+            " . $this->tbl . "
+            WHERE
+                StkFlwCod = :StkFlwCod
+            ";
+        }
+        
 
         $parameters = array(
-            ":StkFlwCod" => $this->attStkFlwCod
+            ":StkFlwCod" => $this->attStkFlwCod,
+            ":StkCod" => $this->attStkCod,
+            ":EqpCod" => $this->attEqpCod
         );
 
         $stmt = $this->cnx->executeQuery($qry, $parameters);
@@ -281,16 +314,31 @@ class StockFlowModel
             $this->delete_referencial();
         }
 
-        $qry = "
-        DELETE FROM
-        " . $this->tbl . "
-        WHERE
-            StkFlwCod = :StkFlwCod
-        ";
+        if (empty($this->attStkFlwCod)) {
+            $qry = "
+            DELETE FROM
+            " . $this->tbl . "
+            WHERE
+                StkCod = :StkCod
+            AND EqpCod = :EqpCod
+            ";
 
-        $parameters = array(
-            ':StkFlwCod' => $this->attStkFlwCod
-        );
+            $parameters = array(
+                ':StkCod' => $this->attStkCod,
+                ':EqpCod' => $this->attEqpCod
+            );
+        } else {
+            $qry = "
+            DELETE FROM
+            " . $this->tbl . "
+            WHERE
+                StkFlwCod = :StkFlwCod
+            ";
+            
+            $parameters = array(
+                ':StkFlwCod' => $this->attStkFlwCod
+            );
+        }
 
         $stmt = $this->cnx->executeQuery($qry, $parameters);
         $rows = $stmt->rowCount();
@@ -349,5 +397,25 @@ class StockFlowModel
         // );
 
         // $stmt = $this->cnx->executeQuery($qry, $parameters);
+    }
+
+    public function EquipmentAvailable() {
+        $qry = "
+        select 
+            EqpCod,
+            EqpDsc
+        from
+            ViewEquipmentAvailable
+        ";
+
+        $stmt = $this->cnx->executeQuery($qry);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
     }
 }

@@ -4,6 +4,8 @@ use app\core\Controller;
 use app\shared\MessageDictionary;
 use app\model\EquipmentModel;
 
+session_start();
+
 class Equipment extends Controller
 {
   private $csEquipmentModel;

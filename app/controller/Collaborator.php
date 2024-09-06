@@ -4,6 +4,8 @@ use app\core\Controller;
 use app\shared\MessageDictionary;
 use app\model\CollaboratorModel;
 
+session_start();
+
 class Collaborator extends Controller
 {
   private $csCollaboratorModel;

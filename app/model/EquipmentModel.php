@@ -281,4 +281,5 @@ class EquipmentModel
 
         // $stmt = $this->cnx->executeQuery($qry, $parameters);
     }
+    
 }

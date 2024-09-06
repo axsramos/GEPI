@@ -2,8 +2,8 @@
 
 use app\core\Controller;
 use app\shared\MessageDictionary;
-use app\model\EtapaModel;
-use app\model\PedidoCompraModel;
+
+session_start();
 
 class Dashboard extends Controller
 {

@@ -34,7 +34,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
 
         <div id="layoutSidenav_content">
             <main>
-                <form action="/GEPI/Stock/Show/<?= $attStkCod; ?>" method="post">
+                <form action="/GEPI/StockFlow/Show/<?= $attStkCod; ?>" method="post">
                     <div class="container-fluid">
                         <h1 class="mt-4">Estoque</h1>
                         <ol class="breadcrumb mb-4">
@@ -104,7 +104,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                                             if ($data_content['DataRows']) {
                                                 foreach ($data_content['DataRows'] as $data_item) {
                                                     echo '<tr>';
-                                                    echo '<td><button class="btn btn-danger" type="button" data-toggle="modal" data-target="#msgModal">Excluir</button></td>';
+                                                    echo '<td><button class="btn btn-danger" type="submit" name="btnDelete" value="' . $data_item['StkFlwCod'] . '">Excluir</button></td>';
                                                     echo '<td hidden>' . $data_item['EqpCod'] . '</td>';
                                                     echo '<td>' . $data_item['EqpDsc'] . '</td>';
                                                     echo '</tr>';
@@ -118,12 +118,12 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                         </div>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-secondary" type="button" href="/GEPI/Stock">Fechar</a>
-                            <button class="btn btn-primary" type="submit" name="btnUpdate" <?= ($data_content['ActionMode'] == 'modeDisplay' ? '' : 'hidden'); ?>>Adicionar Item</button>
+                            <button class="btn btn-primary" type="button" name="btnAddItem" data-toggle="modal" data-target="#msgEquipment">Adicionar Item</button>
                         </div>
                     </div>
 
                     <!-- Modal -->
-                    <div id="msgModal" class="modal fade" role="dialog">
+                    <div id="msgEquipment" class="modal fade" role="dialog">
                         <div class="modal-dialog">
 
                             <!-- Conteúdo do modal-->
@@ -131,20 +131,56 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
 
                                 <!-- Cabeçalho do modal -->
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Confirma a opera&ccedil;&atilde;o?</h4>
+                                    <h4 class="modal-title">Adicionar Equipamento ao Estoque</h4>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
 
                                 <!-- Corpo do modal -->
                                 <div class="modal-body">
-                                    <p>Voc&ecirc; tem certeza que deseja realizar esta a&ccedil;&atilde;o?&nbsp; </p>
-                                    <p>Confirmar a exclus&atilde;o.</p>
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <i class="fas fa-table mr-1"></i>
+                                            Lista
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Item</th>
+                                                            <th hidden>C&oacute;digo</th>
+                                                            <th>Descri&ccedil;&atilde;o</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>Item</th>
+                                                            <th hidden>C&oacute;digo</th>
+                                                            <th>Descri&ccedil;&atilde;o</th>
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+                                                        <?php
+                                                        if ($data_content['NewEquipmentDataRows']) {
+                                                            foreach ($data_content['NewEquipmentDataRows'] as $data_item) {
+                                                                echo '<tr>';
+                                                                echo '<td><button class="btn btn-primary" type="submit" name="btnInsert" value="' . $data_item['EqpCod'] . '">Adicionar</button></td>';
+                                                                echo '<td hidden>' . $data_item['EqpCod'] . '</td>';
+                                                                echo '<td>' . $data_item['EqpDsc'] . '</td>';
+                                                                echo '</tr>';
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Rodapé do modal-->
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger" name="btnDelete">Excluir</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                                 </div>
 
                             </div>
