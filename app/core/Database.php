@@ -6,13 +6,6 @@ use PDO;
 
 class Database extends PDO
 {
-    // --  Production -- //
-    // private $DB_HOST = 'sql103.infinityfree.com';
-    // private $DB_PORT = 3306;
-    // private $DB_NAME = 'if0_37244765_db_shinestock';
-    // private $DB_USER = 'if0_37244765';
-    // private $DB_PASSWORD = '47NiuprkOpV';
-
     // -- Development -- //
     private $DB_HOST = 'localhost';
     private $DB_PORT = 3306;
