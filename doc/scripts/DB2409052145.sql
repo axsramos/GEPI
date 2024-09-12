@@ -2,7 +2,11 @@ use db_gepi;
 
 create or replace view ViewEquipmentAvailable as
 
-select equipment.EqpCod as EqpCod, equipment.EqpDsc as EqpDsc from (
+select 
+	equipment.EqpCod as EqpCod,
+    equipment.EqpDsc as EqpDsc,
+    (select concat(PicDir, PicSrc, '.', PicExt) from Picture where Picture.PicCod = equipment.EqpPic) as EqpImgSrc
+from (
 	select EqpCod from (
 	(
 		select EqpCod 

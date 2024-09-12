@@ -36,7 +36,6 @@
                                             <th>Nome</th>
                                             <th>Bloqueado</th>
                                             <th>Supervisor</th>
-                                            <th>Assinatura</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -46,7 +45,6 @@
                                             <th>Nome</th>
                                             <th>Bloqueado</th>
                                             <th>Supervisor</th>
-                                            <th>Assinatura</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -67,7 +65,6 @@
                                                 } else {
                                                     echo '<td>Sim</td>';
                                                 }
-                                                echo '<td>' . $data_item['ClbKey'] . '</td>';
                                                 echo '</tr>';
                                             }
                                         }

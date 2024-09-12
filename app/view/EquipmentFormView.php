@@ -5,6 +5,7 @@ $attEqpDsc = '';
 $attEqpBlq = 'N';
 $attEqpPic = '';
 $attEqpObs = '';
+$attEqpPicSrc = '';
 
 if (isset($data_content['DataRow']['EqpCod'])) {
     $attEqpCod = $data_content['DataRow']['EqpCod'];
@@ -12,6 +13,7 @@ if (isset($data_content['DataRow']['EqpCod'])) {
     $attEqpBlq = $data_content['DataRow']['EqpBlq'];
     $attEqpPic = $data_content['DataRow']['EqpPic'];
     $attEqpObs = $data_content['DataRow']['EqpObs'];
+    $attEqpPicSrc = $data_content['DataRow']['EqpPicSrc'];
 }
 
 $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
@@ -71,15 +73,16 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                                         </div>
                                     </div>
                                     <div class="mb-3 row">
-                                        <label for="attEqpPic" class="col-sm-2 col-form-label">Foto</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="attEqpPic" name="EqpPic" value="<?= $attEqpPic; ?>" <?= $isDisabled ?> required>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
                                         <label for="attEqpObs" class="col-sm-2 col-form-label">Observa&ccedil;&atilde;o</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="attEqpObs" name="EqpObs" value="<?= $attEqpObs; ?>" <?= $isDisabled; ?>>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="attEqpPic" class="col-sm-2 col-form-label">Foto</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="attEqpPic" name="EqpPic" value="<?= $attEqpPic; ?>" <?= $isDisabled ?> hidden>
+                                            <img src="<?= $attEqpPicSrc; ?>" class="img-fluid img-thumbnail" alt="<?= $attEqpPic; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -90,6 +93,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                             <button class="btn btn-success" type="submit" name="btnConfirm" <?= ($data_content['ActionMode'] == 'modeDisplay' ? 'hidden' : ''); ?>>Confirmar</button>
                             <button class="btn btn-primary" type="submit" name="btnUpdate" <?= ($data_content['ActionMode'] == 'modeDisplay' ? '' : 'hidden'); ?>>Editar</button>
                             <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#msgModal" <?= ($data_content['ActionMode'] == 'modeDisplay' ? '' : 'hidden'); ?>>Excluir</button>
+                            <button class="btn btn-warning" type="button" onclick="anexarFoto();" <?= ($data_content['ActionMode'] == 'modeDisplay' ? 'hidden' : ''); ?>>Foto</button>
                         </div>
                     </div>
 
@@ -130,6 +134,12 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
     </div>
 
     <?php include_once('section/body_scripts_src.php'); ?>
+
+    <script>
+        function anexarFoto() {
+            newWindow = window.open('/GEPI/UploadFile', 'foto', 'position: absolute;');
+        }
+    </script>
 
 </body>
 

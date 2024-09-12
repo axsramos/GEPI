@@ -13,6 +13,7 @@ class EquipmentModel
     private $attEqpBlq;
     private $attEqpPic;
     private $attEqpObs;
+    private $attEqpPicSrc;
 
     // -- database -- //
     private $cnx;
@@ -48,6 +49,10 @@ class EquipmentModel
     public function getEqpObs()
     {
         return $this->attEqpObs;
+    }
+    public function getEqpPicSrc()
+    {
+        return $this->attEqpPicSrc;
     }
 
     // -- set -- //
@@ -280,6 +285,43 @@ class EquipmentModel
         // );
 
         // $stmt = $this->cnx->executeQuery($qry, $parameters);
+    }
+
+    public function readLineWhithPicture()
+    {
+        $qry = "
+        SELECT
+            EqpCod,
+            EqpDsc,
+            EqpPic,
+            EqpBlq,
+            EqpObs,
+            (select concat('/GEPI/', PicDir, PicSrc, '.', PicExt) from picture where PicCod = Equipment.EqpPic) as EqpPicSrc
+        FROM
+        " . $this->tbl . "
+        WHERE
+            EqpCod = :EqpCod
+        ";
+
+        $parameters = array(
+            ":EqpCod" => $this->attEqpCod
+        );
+
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
+        $rows = $stmt->rowCount();
+
+        if ($rows) {
+            $this->data_row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $this->attEqpCod = $this->data_row['EqpCod'];
+            $this->attEqpDsc = $this->data_row['EqpDsc'];
+            $this->attEqpPic = $this->data_row['EqpPic'];
+            $this->attEqpBlq = $this->data_row['EqpBlq'];
+            $this->attEqpObs = $this->data_row['EqpObs'];
+            $this->attEqpPicSrc = $this->data_row['EqpPicSrc'];
+        }
+
+        return boolval($rows);
     }
     
 }

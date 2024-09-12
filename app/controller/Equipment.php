@@ -3,6 +3,7 @@
 use app\core\Controller;
 use app\shared\MessageDictionary;
 use app\model\EquipmentModel;
+use app\model\PictureModel;
 
 session_start();
 
@@ -41,7 +42,9 @@ class Equipment extends Controller
 
       if (isset($_POST['btnConfirm'])) {
         $this->csEquipmentModel = $this->SetValues();
+        $this->csEquipmentModel->setEqpPic($_SESSION['ID_FILE_UPLOAD']);
         if ($this->csEquipmentModel->insertLine()) {
+          $_SESSION['ID_FILE_UPLOAD'] = '';
           header("Location: /GEPI/Equipment");
         }
       }
@@ -66,7 +69,7 @@ class Equipment extends Controller
         $actionMode = 'modeUpdate';
       }
 
-      if ($this->csEquipmentModel->readLine()) {
+      if ($this->csEquipmentModel->readLineWhithPicture()) {
         $data_row = $this->csEquipmentModel->data_row;
       }
     }
@@ -85,7 +88,24 @@ class Equipment extends Controller
     $this->csEquipmentModel->setEqpBlq($_POST['EqpBlq']);
     $this->csEquipmentModel->setEqpPic($_POST['EqpPic']);
     $this->csEquipmentModel->setEqpObs($_POST['EqpObs']);
-    
+
     return $this->csEquipmentModel;
+  }
+
+  public function getPictureSource($inPicCod)
+  {
+    $source_picture = $inPicCod;
+
+    $csPictureModel = new PictureModel();
+    $csPictureModel->setPicCod($inPicCod);
+    if ($csPictureModel->readLine()) {
+      $source_picture = '/GEPI/';
+      $source_picture .= $csPictureModel->getPicDir();
+      $source_picture .= $csPictureModel->getPicSrc();
+      $source_picture .= '.';
+      $source_picture .= $csPictureModel->getPicExt();
+    }
+
+    return $source_picture;
   }
 }

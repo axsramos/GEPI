@@ -10,7 +10,7 @@ session_start();
 class StockFlow extends Controller
 {
   private $csStockFlowModel;
-  PRIVATE $csStockModel;
+  private $csStockModel;
 
   public function Index($id = null)
   {
@@ -54,7 +54,7 @@ class StockFlow extends Controller
           header("Location: /GEPI/StockFlow/Show/" . $idStkCod);
         }
       }
-      
+
       if (isset($_POST['btnInsert'])) {
         $actionMode = 'modeInsert';
 
@@ -71,7 +71,6 @@ class StockFlow extends Controller
       if ($this->csStockFlowModel->readAllLines()) {
         $data_rows = $this->csStockFlowModel->readAllLines();
       }
-      
     }
 
     $data_new_equipments = $this->ListEquipmentAvailable($idStkCod);
@@ -94,11 +93,12 @@ class StockFlow extends Controller
     $this->csStockFlowModel->setStkFlwAddClb($_SESSION['LOGIN_ID']);
     $this->csStockFlowModel->setStkFlwRmvClb(null);
     $this->csStockFlowModel->setStkFlwRsvCod(null);
-    
+
     return $this->csStockFlowModel;
   }
 
-  protected function ListEquipmentAvailable($inStkCod) {
+  protected function ListEquipmentAvailable($inStkCod)
+  {
     $data = array();
 
     $csStockFlowModel = new StockFlowModel();
@@ -110,10 +110,12 @@ class StockFlow extends Controller
 
     foreach ($equipments as $value) {
       $add = TRUE;
-      foreach ($rows as $value_item) {
-        if ($value['EqpCod'] == $value_item['EqpCod']) {
-          $add = FALSE;
-          break;
+      if ($rows) {
+        foreach ($rows as $value_item) {
+          if ($value['EqpCod'] == $value_item['EqpCod']) {
+            $add = FALSE;
+            break;
+          }
         }
       }
       if ($add) {

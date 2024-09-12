@@ -403,7 +403,8 @@ class StockFlowModel
         $qry = "
         select 
             EqpCod,
-            EqpDsc
+            EqpDsc,
+            EqpImgSrc
         from
             ViewEquipmentAvailable
         ";

@@ -82,7 +82,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                                     <div class="mb-3 row">
                                         <label for="attClbKey" class="col-sm-2 col-form-label">Assinatura</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="attClbKey" name="ClbKey" value="<?= $attClbKey; ?>" <?= $isDisabled; ?>>
+                                            <input type="password" class="form-control" id="attClbKey" name="ClbKey" value="<?= $attClbKey; ?>" <?= $isDisabled; ?>>
                                         </div>
                                     </div>
                                 </div>
