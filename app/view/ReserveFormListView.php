@@ -27,6 +27,13 @@ if (isset($data_content['DataRowHeader']['RsvCod'])) {
 }
 
 $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
+$isVisibleAprovar = 'hidden';
+
+if ($data_content['DataRows']) {
+    if (($attRsvApv == 'N') and (count($data_content['DataRows']) > 0)) {
+        $isVisibleAprovar = '';
+    }
+}
 
 ?>
 
@@ -188,9 +195,9 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                                                     echo '    <img src="/GEPI' . $data_item['EqpImgSrc'] . '" class="img-fluid img-thumbnail" alt="...">';
                                                     echo '    <div class="card-footer d-flex align-items-center justify-content-between">';
                                                     if ($included) {
-                                                        echo '        <a class="small text-white stretched-link" href="/GEPI/Reserve/Panel/' . $attRsvCod . '/' . $data_item['EqpCod'] . '">Remover</a>';
+                                                        echo '        <a class="small text-white stretched-link" href="/GEPI/Reserve/Panel/' . $attRsvCod . '/' . $data_item['EqpCod'] . '" >Remover</a>';
                                                     } else {
-                                                        echo '        <a class="small text-white stretched-link" href="/GEPI/Reserve/Panel/' . $attRsvCod . '/' . $data_item['EqpCod'] . '">Adicionar</a>';
+                                                        echo '        <a class="small text-white stretched-link" href="/GEPI/Reserve/Panel/' . $attRsvCod . '/' . $data_item['EqpCod'] . '" >Adicionar</a>';
                                                     }
                                                     echo '        <div class="small text-white"><i class="fas fa-angle-right"></i></div>';
                                                     echo '    </div>';
@@ -222,6 +229,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                         <!-- add button here -->
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-secondary" type="button" href="/GEPI/Reserve">Fechar</a>
+                            <button class="btn btn-success" type="submit" name="btnAprovar" <?= $isVisibleAprovar; ?>>Aprovar Reserva</button>
                         </div>
                     </div>
 
@@ -267,7 +275,12 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                                                         if ($data_content['DataRows']) {
                                                             foreach ($data_content['DataRows'] as $data_item) {
                                                                 echo '<tr>';
-                                                                echo '<td><a class="btn btn-danger" href="/GEPI/Reserve/Panel/' . $attRsvCod . '/' . $data_item['EqpCod'] . '">Remover</a></td>';
+                                                                if ($attRsvApv == 'S') {
+                                                                    echo '<td>Aprovado</td>';
+                                                                } else {
+                                                                    echo '<td><a class="btn btn-danger" href="/GEPI/Reserve/Panel/' . $attRsvCod . '/' . $data_item['EqpCod'] . '">Remover</a></td>';
+                                                                }
+                                                                
                                                                 echo '<td hidden>' . $data_item['EqpCod'] . '</td>';
                                                                 echo '<td>' . $data_item['EqpDsc'] . '</td>';
                                                                 echo '</tr>';

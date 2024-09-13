@@ -316,4 +316,26 @@ class CollaboratorModel
 
         return boolval($rows);
     }
+
+    public function Quantity()
+    {
+        $qry = "
+        SELECT
+            count(ClbCod) as ClbQtd
+        FROM
+        " . $this->tbl . "
+        WHERE
+            ClbBlq = 'N'
+        ";
+
+        $stmt = $this->cnx->executeQuery($qry);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
+    }
 }

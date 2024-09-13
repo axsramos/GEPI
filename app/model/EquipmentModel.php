@@ -323,5 +323,27 @@ class EquipmentModel
 
         return boolval($rows);
     }
+
+    public function Quantity()
+    {
+        $qry = "
+        SELECT
+            Count(EqpCod) as EqpQtd
+        FROM
+        " . $this->tbl . "
+        WHERE
+            EqpBlq = 'N'
+        ";
+
+        $stmt = $this->cnx->executeQuery($qry);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
+    }
     
 }

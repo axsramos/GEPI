@@ -458,4 +458,86 @@ class ReserveModel
 
         return boolval($rows);
     }
+
+    public function readAllLinesApproved() 
+    {
+        $qry = "
+        SELECT
+            RsvCod,
+            RsvDta,
+            RsvClb,
+            (select Collaborator.ClbNme from Collaborator where Collaborator.ClbCod = Reserve.RsvClb) as RsvClbNme,
+            RsvBlq,
+            RsvApv,
+            RsvLck,
+            RsvClbLck,
+            RsvLckDta,
+            (select count(ReserveEquipment.EqpCod) from ReserveEquipment where ReserveEquipment.RsvCod = Reserve.RsvCod) as RsvEqpQtd 
+        FROM
+        " . $this->tbl . "
+        WHERE
+            RsvBlq = 'N'
+        AND RsvLck = 'N'
+        AND RsvDta >= now()
+        AND RsvApv = 'S'
+        ";
+        
+        $stmt = $this->cnx->executeQuery($qry);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
+    }
+
+    public function QuantityApproved()
+    {
+        $qry = "
+        SELECT
+            Count(RsvCod) as RsvQtdApv
+        FROM
+        " . $this->tbl . "
+        WHERE
+            RsvBlq = 'N'
+        AND RsvLck = 'N'
+        AND RsvApv = 'S'
+        ";
+
+        $stmt = $this->cnx->executeQuery($qry);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
+    }
+
+    public function QuantityLocked()
+    {
+        $qry = "
+        SELECT
+            Count(RsvCod) as RsvQtdLck
+        FROM
+        " . $this->tbl . "
+        WHERE
+            RsvBlq = 'N'
+        AND RsvLck = 'S'
+        AND RsvApv = 'S'
+        ";
+
+        $stmt = $this->cnx->executeQuery($qry);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
+    }
 }

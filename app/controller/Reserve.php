@@ -76,7 +76,7 @@ class Reserve extends Controller
       }
     }
 
-    $data_content = array("Messages" => $messages, "ActionMode" => $actionMode, "DataRow" => $data_row, "DataEquipments" =>$data_equipments);
+    $data_content = array("Messages" => $messages, "ActionMode" => $actionMode, "DataRow" => $data_row, "DataEquipments" => $data_equipments);
 
     $this->view('ReserveFormView', $data_content);
   }
@@ -86,7 +86,7 @@ class Reserve extends Controller
     if (isset($_POST['RsvCod'])) {
       $this->csReserveModel->setRsvCod($_POST['RsvCod']);
     }
-    
+
     $this->csReserveModel->setRsvDta($_POST['RsvDta']);
     $this->csReserveModel->setRsvClb($_POST['RsvClb']);
     $this->csReserveModel->setRsvBlq($_POST['RsvBlq']);
@@ -94,11 +94,11 @@ class Reserve extends Controller
     $this->csReserveModel->setRsvLck((empty($_POST['RsvLck']) ? 'N' : $_POST['RsvLck']));
     $this->csReserveModel->setRsvClbLck((empty($_POST['RsvClbLck']) ? null : $_POST['RsvClbLck']));
     $this->csReserveModel->setRsvLckDta((empty($_POST['RsvLckDta']) ? null : $_POST['RsvLckDta']));
-    
+
     return $this->csReserveModel;
   }
 
-  public function Panel($id = null, $eqp = null) 
+  public function Panel($id = null, $eqp = null)
   {
     $message  = new MessageDictionary;
     $messages = array();
@@ -110,22 +110,33 @@ class Reserve extends Controller
     $this->csReserveModel = new ReserveModel();
     $this->csReserveModel->setRsvCod($id);
 
+    if (isset($_POST['btnAprovar'])) {
+      if ($this->csReserveModel->readLine()) {
+        if ($this->csReserveModel->getRsvApv() == 'N') {
+          $this->csReserveModel->setRsvApv('S');
+          $result = $this->csReserveModel->updateLine();
+        }
+      }
+    }
+
     if (!empty($eqp)) {
       $this->csReserveModel->setEqpCod($eqp);
       $result = $this->csReserveModel->addOrRemoveEquipment();
     }
-
-    $csStockFlowModel = new StockFlowModel();
-    $data_equipments = $csStockFlowModel->EquipmentAvailable();
-
+    
     if ($this->csReserveModel->readLine()) {
       $data_row = $this->csReserveModel->data_row;
       $actionMode = 'modeUpdate';
     }
 
+    $csStockFlowModel = new StockFlowModel();
+    if ($this->csReserveModel->getRsvApv() != 'S') {
+      $data_equipments = $csStockFlowModel->EquipmentAvailable();
+    }
+
     $data_rows = $this->csReserveModel->readAllLinesEquipments();
 
-    $data_content = array("Messages" => $messages, "ActionMode" => $actionMode, "DataRowHeader" => $data_row, "DataRows" => $data_rows, "DataEquipments" =>$data_equipments);
+    $data_content = array("Messages" => $messages, "ActionMode" => $actionMode, "DataRowHeader" => $data_row, "DataRows" => $data_rows, "DataEquipments" => $data_equipments);
 
     $this->view('ReserveFormListView', $data_content);
   }
