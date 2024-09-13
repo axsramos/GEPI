@@ -3,24 +3,24 @@ use db_gepi;
 create or replace view ViewEquipmentAvailable as
 
 select 
-	equipment.EqpCod as EqpCod,
-    equipment.EqpDsc as EqpDsc,
-    (select concat(PicDir, PicSrc, '.', PicExt) from Picture where Picture.PicCod = equipment.EqpPic) as EqpImgSrc
+	Equipment.EqpCod as EqpCod,
+    Equipment.EqpDsc as EqpDsc,
+    (select concat(PicDir, PicSrc, '.', PicExt) from Picture where Picture.PicCod = Equipment.EqpPic) as EqpImgSrc
 from (
 	select EqpCod from (
 	(
 		select EqpCod 
-		from stockflow 
+		from StockFlow 
 		where StkFlwRsvCod = 0 
 		  and StkFlwBlq = 'S'
 	) union (
 		select EqpCod 
-		from equipment 
+		from Equipment 
 		where EqpBlq = 'N'
 	)
 	) as FilterEquipmentAvailable
 	group by EqpCod
 ) as EquipmentAvailable
-inner join equipment
-on equipment.EqpCod = EquipmentAvailable.EqpCod
+inner join Equipment
+on Equipment.EqpCod = EquipmentAvailable.EqpCod
 ;

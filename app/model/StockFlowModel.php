@@ -144,7 +144,7 @@ class StockFlowModel
         if ($rows) {
             $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        
+
         return $allLines;
     }
 
@@ -186,7 +186,7 @@ class StockFlowModel
                 StkFlwCod = :StkFlwCod
             ";
         }
-        
+
 
         $parameters = array(
             ":StkFlwCod" => $this->attStkFlwCod,
@@ -334,7 +334,7 @@ class StockFlowModel
             WHERE
                 StkFlwCod = :StkFlwCod
             ";
-            
+
             $parameters = array(
                 ':StkFlwCod' => $this->attStkFlwCod
             );
@@ -399,14 +399,40 @@ class StockFlowModel
         // $stmt = $this->cnx->executeQuery($qry, $parameters);
     }
 
-    public function EquipmentAvailable() {
+    public function EquipmentAvailable()
+    {
+        // hospedagem nao permitiu gerar view, utilizar query//
+        // $qry = "
+        // select 
+        //     EqpCod,
+        //     EqpDsc,
+        //     EqpImgSrc
+        // from
+        //     ViewEquipmentAvailable
+        // ";
+
         $qry = "
         select 
-            EqpCod,
-            EqpDsc,
-            EqpImgSrc
-        from
-            ViewEquipmentAvailable
+            Equipment.EqpCod as EqpCod,
+            Equipment.EqpDsc as EqpDsc,
+            (select concat(PicDir, PicSrc, '.', PicExt) from Picture where Picture.PicCod = Equipment.EqpPic) as EqpImgSrc
+        from (
+            select EqpCod from (
+            (
+                select EqpCod 
+                from StockFlow 
+                where StkFlwRsvCod = 0 
+                and StkFlwBlq = 'S'
+            ) union (
+                select EqpCod 
+                from Equipment 
+                where EqpBlq = 'N'
+            )
+            ) as FilterEquipmentAvailable
+            group by EqpCod
+        ) as EquipmentAvailable
+        inner join Equipment
+        on Equipment.EqpCod = EquipmentAvailable.EqpCod
         ";
 
         $stmt = $this->cnx->executeQuery($qry);
