@@ -47,11 +47,11 @@ create table Reserve (
     RsvBlq char(1) default 'N' not null,
     RsvApv char(1) default 'N' not null,
     RsvLck char(1) default 'N' not null,
-    RsvClbLck varchar(60) not null,
+    RsvClbLck varchar(60) null,
     RsvLckDta datetime null,
     constraint PKRsv primary key (RsvCod),
     constraint FKRsv01 foreign key (RsvClb) references Collaborator (ClbCod),
-    constraint FKRsv02 foreign key (RsvClbLck) references Collaborator (ClbCod),
+    -- constraint FKRsv02 foreign key (RsvClbLck) references Collaborator (ClbCod),
     index IRsv01 (RsvDta desc),
     index IRsv02 (RsvBlq asc, RsvLck asc, RsvDta desc)
 );

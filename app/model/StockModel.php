@@ -251,17 +251,17 @@ class StockModel
     }
     private function delete_referencial()
     {
-        // $qry = "
-        // DELETE FROM
-        // StkItm
-        // WHERE
-        //     StkCod = :StkCod
-        // ";
+        $qry = "
+        DELETE FROM
+            Stockflow
+        WHERE
+            StkCod = :StkCod
+        ";
 
-        // $parameters = array(
-        //     ':StkCod' => $this->attStkCod
-        // );
-
-        // $stmt = $this->cnx->executeQuery($qry, $parameters);
+        $parameters = array(
+            ':StkCod' => $this->attStkCod
+        );
+        
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
     }
 }

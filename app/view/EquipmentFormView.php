@@ -78,7 +78,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                                             <input type="text" class="form-control" id="attEqpObs" name="EqpObs" value="<?= $attEqpObs; ?>" <?= $isDisabled; ?>>
                                         </div>
                                     </div>
-                                    <div class="mb-3 row">
+                                    <div class="mb-3 row" <?=(empty($attEqpPicSrc) ? 'hidden' : '');?>>
                                         <label for="attEqpPic" class="col-sm-2 col-form-label">Foto</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="attEqpPic" name="EqpPic" value="<?= $attEqpPic; ?>" <?= $isDisabled ?> hidden>
@@ -93,7 +93,7 @@ $isDisabled = ($data_content['ActionMode'] == 'modeDisplay' ? 'disabled' : '');
                             <button class="btn btn-success" type="submit" name="btnConfirm" <?= ($data_content['ActionMode'] == 'modeDisplay' ? 'hidden' : ''); ?>>Confirmar</button>
                             <button class="btn btn-primary" type="submit" name="btnUpdate" <?= ($data_content['ActionMode'] == 'modeDisplay' ? '' : 'hidden'); ?>>Editar</button>
                             <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#msgModal" <?= ($data_content['ActionMode'] == 'modeDisplay' ? '' : 'hidden'); ?>>Excluir</button>
-                            <button class="btn btn-warning" type="button" onclick="anexarFoto();" <?= ($data_content['ActionMode'] == 'modeDisplay' ? 'hidden' : ''); ?>>Foto</button>
+                            <button class="btn btn-warning" type="button" onclick="anexarFoto();" <?= ((($data_content['ActionMode'] == 'modeDisplay') or (!empty($attEqpPicSrc))) ? 'hidden' : ''); ?>>Foto</button>
                         </div>
                     </div>
 

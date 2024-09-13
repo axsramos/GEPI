@@ -35,9 +35,9 @@
                 </a>
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion" <?=$is_visible;?>>
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="layout-sidenav-light.html">Colaborador</a>
-                        <a class="nav-link" href="layout-sidenav-light.html">Equipamento</a>
-                        <a class="nav-link" href="layout-static.html">Estoque</a>
+                        <a class="nav-link" href="#">Colaborador</a>
+                        <a class="nav-link" href="#">Equipamento</a>
+                        <a class="nav-link" href="#">Estoque</a>
                     </nav>
                 </div>                
             </div>

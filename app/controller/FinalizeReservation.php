@@ -3,12 +3,14 @@
 use app\core\Controller;
 use app\shared\MessageDictionary;
 use app\model\ReserveModel;
+use app\model\CollaboratorModel;
 
 session_start();
 
 class FinalizeReservation extends Controller
 {
   private $csReserveModel;
+  private $csCollaboratorModel;
 
   public function Index($id = null)
   {
@@ -31,12 +33,21 @@ class FinalizeReservation extends Controller
       $data_row = $this->csReserveModel->data_row;
 
       if (isset($_POST['btnFinalizar'])) {
-        $this->csReserveModel->setRsvLck('S');
-        $this->csReserveModel->setRsvClbLck($_POST['attBiometrics']);
-        $this->csReserveModel->setRsvLckDta(date('Y-m-d H-i-s'));
+        $attBiometrics = $_POST['attBiometrics'];
 
-        if ($this->csReserveModel->updateLine()) {
-          header("Location: /GEPI/Dashboard");
+        $this->csCollaboratorModel = new CollaboratorModel();
+        $this->csCollaboratorModel->setClbKey($attBiometrics);
+
+        if ($this->csCollaboratorModel->checklogin()) {
+          $this->csReserveModel->setRsvLck('S');
+          $this->csReserveModel->setRsvClbLck($this->csCollaboratorModel->getClbCod());
+          $this->csReserveModel->setRsvLckDta(date('Y-m-d H-i-s'));
+
+          if ($this->csReserveModel->updateLine()) {
+            header("Location: /GEPI/Dashboard");
+          }
+        } else {
+          array_push($messages, $message->getDictionaryError(1, "Messages", "Autenticação falhou. Tente novamente."));
         }
       }
     }

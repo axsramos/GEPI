@@ -42,7 +42,12 @@ class Equipment extends Controller
 
       if (isset($_POST['btnConfirm'])) {
         $this->csEquipmentModel = $this->SetValues();
-        $this->csEquipmentModel->setEqpPic($_SESSION['ID_FILE_UPLOAD']);
+        if (empty($_SESSION['ID_FILE_UPLOAD'])) {
+          $this->csEquipmentModel->setEqpPic('none'); // fix //
+        } else {
+          $this->csEquipmentModel->setEqpPic($_SESSION['ID_FILE_UPLOAD']);
+        }
+        
         if ($this->csEquipmentModel->insertLine()) {
           $_SESSION['ID_FILE_UPLOAD'] = '';
           header("Location: /GEPI/Equipment");

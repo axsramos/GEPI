@@ -126,10 +126,12 @@ class ReserveModel
             RsvCod,
             RsvDta,
             RsvClb,
+            (select Collaborator.ClbNme from Collaborator where Collaborator.ClbCod = Reserve.RsvClb) as RsvClbNme,
             RsvBlq,
             RsvApv,
             RsvLck,
             RsvClbLck,
+            (select Collaborator.ClbNme from Collaborator where Collaborator.ClbCod = Reserve.RsvClbLck) as RsvClbLckNme,
             RsvLckDta 
         FROM
         " . $this->tbl . "
@@ -339,18 +341,18 @@ class ReserveModel
     }
     private function delete_referencial()
     {
-        // $qry = "
-        // DELETE FROM
-        // RsvItm
-        // WHERE
-        //     RsvCod = :RsvCod
-        // ";
+        $qry = "
+        DELETE FROM
+            ReserveEquipment
+        WHERE
+            RsvCod = :RsvCod
+        ";
 
-        // $parameters = array(
-        //     ':RsvCod' => $this->attRsvCod
-        // );
+        $parameters = array(
+            ':RsvCod' => $this->attRsvCod
+        );
 
-        // $stmt = $this->cnx->executeQuery($qry, $parameters);
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
     }
 
     public function readAllLinesEquipments()
@@ -359,10 +361,14 @@ class ReserveModel
         SELECT
             RsvEqpCod,
             RsvCod,
-            EqpCod,
-            (select Equipment.EqpDsc from Equipment where Equipment.EqpCod = ReserveEquipment.EqpCod) as EqpDsc
+            ReserveEquipment.EqpCod,
+            (select Equipment.EqpDsc from Equipment where Equipment.EqpCod = ReserveEquipment.EqpCod) as EqpDsc,
+            (select concat('/GEPI/', PicDir, PicSrc, '.', PicExt) from Picture where PicCod = Equipment.EqpPic) as EqpImgSrc
         FROM
             ReserveEquipment
+        INNER JOIN
+            Equipment
+        ON Equipment.EqpCod = ReserveEquipment.EqpCod
         WHERE
             RsvCod = :RsvCod
         ";
@@ -461,6 +467,7 @@ class ReserveModel
 
     public function readAllLinesApproved() 
     {
+        $date_today = date('Y-m-d');
         $qry = "
         SELECT
             RsvCod,
@@ -471,6 +478,7 @@ class ReserveModel
             RsvApv,
             RsvLck,
             RsvClbLck,
+            (select Collaborator.ClbNme from Collaborator where Collaborator.ClbCod = Reserve.RsvClbLck) as RsvClbLckNme,
             RsvLckDta,
             (select count(ReserveEquipment.EqpCod) from ReserveEquipment where ReserveEquipment.RsvCod = Reserve.RsvCod) as RsvEqpQtd 
         FROM
@@ -478,11 +486,15 @@ class ReserveModel
         WHERE
             RsvBlq = 'N'
         AND RsvLck = 'N'
-        AND RsvDta >= now()
+        AND RsvDta >= :RsvDta
         AND RsvApv = 'S'
         ";
+
+        $parameters = array(
+            ':RsvDta' => $date_today
+        );
         
-        $stmt = $this->cnx->executeQuery($qry);
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
         $rows = $stmt->rowCount();
         $allLines = false;
 

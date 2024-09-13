@@ -114,7 +114,9 @@ class Reserve extends Controller
       if ($this->csReserveModel->readLine()) {
         if ($this->csReserveModel->getRsvApv() == 'N') {
           $this->csReserveModel->setRsvApv('S');
-          $result = $this->csReserveModel->updateLine();
+          if ($this->csReserveModel->updateLine()) {
+            header("Location: /GEPI/Reserve");
+          }
         }
       }
     }

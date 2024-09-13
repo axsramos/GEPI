@@ -63,7 +63,7 @@
                                                 echo '<td><a type="button" class="btn btn-outline-primary" href="/GEPI/Reserve/Show/' . $data_item['RsvCod'] . '">Item</a></td>';
                                                 echo '<td hidden>' . $data_item['RsvCod'] . '</td>';
                                                 echo '<td>' . $data_item['RsvDta'] . '</td>';
-                                                echo '<td>' . $data_item['RsvClb'] . '</td>';
+                                                echo '<td>' . $data_item['RsvClbNme'] . '</td>';
                                                 if ($data_item['RsvBlq'] == 'N') {
                                                     echo '<td>N&atilde;o</td>';
                                                 } else {
@@ -79,7 +79,7 @@
                                                 } else {
                                                     echo '<td>Sim</td>';
                                                 }
-                                                echo '<td>' . $data_item['RsvClbLck'] . '</td>';
+                                                echo '<td>' . $data_item['RsvClbLckNme'] . '</td>';
                                                 echo '<td>' . $data_item['RsvLckDta'] . '</td>';
                                                 echo '</tr>';
                                             }

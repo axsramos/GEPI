@@ -59,6 +59,15 @@ if ($attRsvLck == 'N') {
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Cadastro de reserva</li>
                         </ol>
+                        <?php
+                        if ($data_content['Messages']) {
+                            foreach ($data_content['Messages'] as $message_item) {
+                                echo '<div class="' . $message_item['alert'] . '" role="alert">';
+                                echo $message_item['message'];
+                                echo '</div>';
+                            }
+                        }
+                        ?>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-list mr-1"></i>
@@ -155,7 +164,7 @@ if ($attRsvLck == 'N') {
                                         </tfoot>
                                         <tbody>
                                             <?php
-                                            if ($data_content['DataEquipments']) {
+                                            if ($data_content['DataRows']) {
                                                 foreach ($data_content['DataRows'] as $data_item) {
                                                     if ($column_print == 0) {
                                                         echo '<tr>';
@@ -170,7 +179,7 @@ if ($attRsvLck == 'N') {
                                                     echo '<td>';
                                                     echo '<div class="card bg-success text-white mb-4">';
                                                     echo '    <div class="card-body">' . $data_item['EqpDsc'] . '</div>';
-                                                    echo '    <img src="/GEPI' . $data_item['EqpImgSrc'] . '" class="img-fluid img-thumbnail" alt="...">';
+                                                    echo '    <img src="' . $data_item['EqpImgSrc'] . '" class="img-fluid img-thumbnail" alt="...">';
                                                     echo '    <div class="card-footer d-flex align-items-center justify-content-between">';
                                                     echo '        <a class="small text-white stretched-link" href="#">Produto para retirar</a>';
                                                     echo '        <div class="small text-white"><i class="fas fa-angle-right"></i></div>';
@@ -229,7 +238,7 @@ if ($attRsvLck == 'N') {
                                         </div>
                                         <div class="form-group">
                                             <label class="small mb-1" for="attBiometrics">Chave de Autentica&ccedil;&atilde;o</label>
-                                            <input class="form-control py-4" id="attBiometrics" name="attBiometrics" type="password" placeholder="Entre com sua biometria" autofocus="autofocus" required/>
+                                            <input class="form-control py-4" id="attBiometrics" name="attBiometrics" type="password" placeholder="Entre com sua biometria" autofocus="autofocus" required />
                                         </div>
                                     </div>
                                 </div>
