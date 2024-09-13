@@ -16,6 +16,9 @@ class ReserveModel
     private $attRsvLck;
     private $attRsvClbLck;
     private $attRsvLckDta;
+    private $attRsvEqpCod;
+    private $attEqpCod;
+    private $attEqpDsc;
 
     // -- database -- //
     private $cnx;
@@ -64,6 +67,14 @@ class ReserveModel
     {
         return $this->attRsvLckDta;
     }
+    public function getRsvEqpCod()
+    {
+        return $this->attRsvEqpCod;
+    }
+    public function getEqpCod()
+    {
+        return $this->attEqpCod;
+    }
 
     // -- set -- //
     public function setRsvCod($inRsvCod)
@@ -92,11 +103,19 @@ class ReserveModel
     }
     public function setRsvClbLck($inRsvClbLck)
     {
-        $this->attRsvClbLck = htmlspecialchars($inRsvClbLck);
+        $this->attRsvClbLck = $inRsvClbLck;
     }
     public function setRsvLckDta($inRsvLckDta)
     {
         $this->attRsvLckDta = $inRsvLckDta;
+    }
+    public function setRsvEqpCod($inRsvEqpCod)
+    {
+        $this->attRsvEqpCod = $inRsvEqpCod;
+    }
+    public function setEqpCod($inEqpCod)
+    {
+        $this->attEqpCod = $inEqpCod;
     }
 
     // -- crud -- //
@@ -134,10 +153,12 @@ class ReserveModel
             RsvCod,
             RsvDta,
             RsvClb,
+            (select Collaborator.ClbNme from Collaborator where Collaborator.ClbCod = Reserve.RsvClb) as RsvClbNme,
             RsvBlq,
             RsvApv,
             RsvLck,
             RsvClbLck,
+            (select Collaborator.ClbNme from Collaborator where Collaborator.ClbCod = Reserve.RsvClbLck) as RsvClbLckNme,
             RsvLckDta 
         FROM
         " . $this->tbl . "
@@ -155,13 +176,13 @@ class ReserveModel
         if ($rows) {
             $this->data_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $this->attRsvDta = $this->data_row['attRsvDta'];
-            $this->attRsvClb = $this->data_row['attRsvClb'];
-            $this->attRsvBlq = $this->data_row['attRsvBlq'];
-            $this->attRsvApv = $this->data_row['attRsvApv'];
-            $this->attRsvLck = $this->data_row['attRsvLck'];
-            $this->attRsvClbLck = $this->data_row['attRsvClbLck'];
-            $this->attRsvLckDta = $this->data_row['attRsvLckDta'];
+            $this->attRsvDta = $this->data_row['RsvDta'];
+            $this->attRsvClb = $this->data_row['RsvClb'];
+            $this->attRsvBlq = $this->data_row['RsvBlq'];
+            $this->attRsvApv = $this->data_row['RsvApv'];
+            $this->attRsvLck = $this->data_row['RsvLck'];
+            $this->attRsvClbLck = $this->data_row['RsvClbLck'];
+            $this->attRsvLckDta = $this->data_row['RsvLckDta'];
         }
 
         return boolval($rows);
@@ -213,7 +234,7 @@ class ReserveModel
             ':RsvApv' => $this->attRsvApv,
             ':RsvLck' => $this->attRsvLck,
             ':RsvClbLck' => $this->attRsvClbLck,
-            ':RsvLckDta' => $this->attRsvLckDta 
+            ':RsvLckDta' => $this->attRsvLckDta
         );
 
         $stmt = $this->cnx->executeQuery($qry, $parameters);
@@ -247,7 +268,7 @@ class ReserveModel
             ':RsvApv' => $this->attRsvApv,
             ':RsvLck' => $this->attRsvLck,
             ':RsvClbLck' => $this->attRsvClbLck,
-            ':RsvLckDta' => $this->attRsvLckDta 
+            ':RsvLckDta' => $this->attRsvLckDta
         );
 
         $stmt = $this->cnx->executeQuery($qry, $parameters);
@@ -284,7 +305,7 @@ class ReserveModel
     {
         do {
             $this->attRsvCod = uniqid();
-        } while(!$this->check_duplicate_key());
+        } while (!$this->check_duplicate_key());
     }
 
     private function check_duplicate_key()
@@ -331,5 +352,110 @@ class ReserveModel
 
         // $stmt = $this->cnx->executeQuery($qry, $parameters);
     }
-    
+
+    public function readAllLinesEquipments()
+    {
+        $qry = "
+        SELECT
+            RsvEqpCod,
+            RsvCod,
+            EqpCod,
+            (select Equipment.EqpDsc from Equipment where Equipment.EqpCod = ReserveEquipment.EqpCod) as EqpDsc
+        FROM
+            ReserveEquipment
+        WHERE
+            RsvCod = :RsvCod
+        ";
+
+        $parameters = array(
+            ":RsvCod" => $this->attRsvCod
+        );
+
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
+        $rows = $stmt->rowCount();
+        $allLines = false;
+
+        if ($rows) {
+            $allLines = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        return $allLines;
+    }
+
+    public function addOrRemoveEquipment()
+    {
+        $qry = "
+        SELECT
+            RsvEqpCod,
+            RsvCod,
+            EqpCod
+        FROM
+            ReserveEquipment
+        WHERE
+            RsvCod = :RsvCod
+        AND EqpCod = :EqpCod
+        ";
+
+        $parameters = array(
+            ":RsvCod" => $this->attRsvCod,
+            ":EqpCod" => $this->attEqpCod
+        );
+
+        $stmt = $this->cnx->executeQuery($qry, $parameters);
+        $rows = $stmt->rowCount();
+
+        if ($rows) {
+            $this->data_row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $this->attRsvEqpCod = $this->data_row['RsvEqpCod'];
+            $this->attRsvCod = $this->data_row['RsvCod'];
+            $this->attEqpCod = $this->data_row['EqpCod'];
+        }
+
+        if ($rows) {
+            
+            $qry = "
+            DELETE FROM
+                ReservEequipment
+            WHERE
+                RsvEqpCod = :RsvEqpCod
+            ";
+
+            $parameters = array(
+                ":RsvEqpCod" => $this->attRsvEqpCod
+            );
+
+            $stmt = $this->cnx->executeQuery($qry, $parameters);
+            $rows = $stmt->rowCount();
+        } else {
+            $qry = "
+            INSERT INTO
+                ReservEequipment
+            (
+                RsvEqpCod,
+                RsvCod,
+                EqpCod
+            )
+            VALUES
+            (
+                :RsvEqpCod,
+                :RsvCod,
+                :EqpCod
+            )
+            ";
+
+            $this->setRsvEqpCod(uniqid());
+
+            $parameters = array(
+                ':RsvEqpCod' => $this->attRsvEqpCod,
+                ':RsvCod' => $this->attRsvCod,
+                ':EqpCod' => $this->attEqpCod
+            );
+            
+            $stmt = $this->cnx->executeQuery($qry, $parameters);
+            $rows = $stmt->rowCount();
+        }
+
+        return boolval($rows);
+    }
 }

@@ -78,7 +78,7 @@ class Reserve extends Controller
 
     $data_content = array("Messages" => $messages, "ActionMode" => $actionMode, "DataRow" => $data_row, "DataEquipments" =>$data_equipments);
 
-    $this->view('ReservePainelView', $data_content);
+    $this->view('ReserveFormView', $data_content);
   }
 
   private function SetValues()
@@ -86,10 +86,47 @@ class Reserve extends Controller
     if (isset($_POST['RsvCod'])) {
       $this->csReserveModel->setRsvCod($_POST['RsvCod']);
     }
-    $this->csReserveModel->setRsvDsc($_POST['RsvDsc']);
+    
+    $this->csReserveModel->setRsvDta($_POST['RsvDta']);
+    $this->csReserveModel->setRsvClb($_POST['RsvClb']);
     $this->csReserveModel->setRsvBlq($_POST['RsvBlq']);
-    $this->csReserveModel->setRsvObs($_POST['RsvObs']);
+    $this->csReserveModel->setRsvApv($_POST['RsvApv']);
+    $this->csReserveModel->setRsvLck((empty($_POST['RsvLck']) ? 'N' : $_POST['RsvLck']));
+    $this->csReserveModel->setRsvClbLck((empty($_POST['RsvClbLck']) ? null : $_POST['RsvClbLck']));
+    $this->csReserveModel->setRsvLckDta((empty($_POST['RsvLckDta']) ? null : $_POST['RsvLckDta']));
     
     return $this->csReserveModel;
+  }
+
+  public function Panel($id = null, $eqp = null) 
+  {
+    $message  = new MessageDictionary;
+    $messages = array();
+
+    if (empty($id)) {
+      header("Location: /GEPI/Reserve");
+    }
+
+    $this->csReserveModel = new ReserveModel();
+    $this->csReserveModel->setRsvCod($id);
+
+    if (!empty($eqp)) {
+      $this->csReserveModel->setEqpCod($eqp);
+      $result = $this->csReserveModel->addOrRemoveEquipment();
+    }
+
+    $csStockFlowModel = new StockFlowModel();
+    $data_equipments = $csStockFlowModel->EquipmentAvailable();
+
+    if ($this->csReserveModel->readLine()) {
+      $data_row = $this->csReserveModel->data_row;
+      $actionMode = 'modeUpdate';
+    }
+
+    $data_rows = $this->csReserveModel->readAllLinesEquipments();
+
+    $data_content = array("Messages" => $messages, "ActionMode" => $actionMode, "DataRowHeader" => $data_row, "DataRows" => $data_rows, "DataEquipments" =>$data_equipments);
+
+    $this->view('ReserveFormListView', $data_content);
   }
 }
