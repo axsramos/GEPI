@@ -18,11 +18,42 @@ O colaborador supervisor da empresa será responsável por realizar a reserva do
 
 O sistema sinalizará em um controle de estoque que os equipamentos foram baixados do estoque e este histórico ficará acessível para geração dos relatórios do moviento do estoque.
 
+
+
 <table>
   <tr>
     <td>
-    <h3>captura de tela</h3>
-      <!-- <img alt="Dashboard" title="#Dashboard" src="./doc/screenshot/Dashboard.PNG" /> -->
+    <h3>Dashboard</h3>
+      <img alt="Dashboard" title="#Dashboard" src="./doc/screenshot/dashboard.PNG" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <h3>Equipamento</h3>
+      <img alt="Equipamento" title="#Dashboard" src="./doc/screenshot/equipamento.PNG" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <h3>Estoque</h3>
+      <img alt="Estoque" title="#Dashboard" src="./doc/screenshot/estoque.PNG" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <h3>Reserva</h3>
+      <img alt="Reserva" title="#Dashboard" src="./doc/screenshot/reserva.PNG" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+    <h3>Retirada</h3>
+      <img alt="Retirada" title="#Dashboard" src="./doc/screenshot/retirada.PNG" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a href="http://gepi.portalsiti.free.nf/GEPI/Login/" target="_blank">VER Demonstra&ccedil;&atilde;o</a>
     </td>
   </tr>
 </table>
