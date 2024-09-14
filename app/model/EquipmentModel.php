@@ -296,7 +296,7 @@ class EquipmentModel
             EqpPic,
             EqpBlq,
             EqpObs,
-            (select concat('/GEPI/', PicDir, PicSrc, '.', PicExt) from picture where PicCod = Equipment.EqpPic) as EqpPicSrc
+            (select concat('/GEPI/', PicDir, PicSrc, '.', PicExt) from Picture where PicCod = Equipment.EqpPic) as EqpPicSrc
         FROM
         " . $this->tbl . "
         WHERE

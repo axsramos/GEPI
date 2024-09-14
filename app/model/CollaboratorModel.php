@@ -16,7 +16,7 @@ class CollaboratorModel
 
     // -- database -- //
     private $cnx;
-    private $tbl = 'collaborator';
+    private $tbl = 'Collaborator';
 
     private $csMessage;
     public $messages = array();

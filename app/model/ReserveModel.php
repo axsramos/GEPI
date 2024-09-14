@@ -436,7 +436,7 @@ class ReserveModel
         } else {
             $qry = "
             INSERT INTO
-                ReservEequipment
+                ReserveEquipment
             (
                 RsvEqpCod,
                 RsvCod,
