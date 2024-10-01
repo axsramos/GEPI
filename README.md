@@ -18,7 +18,7 @@ O colaborador supervisor da empresa será responsável por realizar a reserva do
 
 O sistema sinalizará em um controle de estoque que os equipamentos foram baixados do estoque e este histórico ficará acessível para geração dos relatórios do moviento do estoque.
 
-
+[VER Demonstra&ccedil;&atilde;o](http://gepi.portalsiti.free.nf/GEPI/Login/)
 
 <table>
   <tr>
@@ -51,12 +51,9 @@ O sistema sinalizará em um controle de estoque que os equipamentos foram baixad
       <img alt="Retirada" title="#Dashboard" src="./doc/screenshot/retirada.PNG" />
     </td>
   </tr>
-  <tr>
-    <td>
-      <a href="http://gepi.portalsiti.free.nf/GEPI/Login/" target="_blank">VER Demonstra&ccedil;&atilde;o</a>
-    </td>
-  </tr>
 </table>
+
+[VER Demonstra&ccedil;&atilde;o](http://gepi.portalsiti.free.nf/GEPI/Login/)
 
 ## Funcionalidades
 * Cadastro dos equipamentos com foto e descrição.
